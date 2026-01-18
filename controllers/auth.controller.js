@@ -8,7 +8,11 @@ export const register = async (req, res) => {
     try {
         const user = await registerUser(username, password);
 
-        return res.status(201).json({ message: "User registered successfully", user });
+        const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+        });
+
+        return res.status(201).json({ message: "User registered successfully", user, token });
     } catch (error) {
         if (error.code === "23505") {
             return res.status(409).json({

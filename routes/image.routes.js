@@ -1,9 +1,13 @@
 import express from "express";
 import { jwtCheck } from "../middlewares/auth.middleware.js";
-import { upload } from "../middlewares/image.middleware.js";
-import { uploadImageController, getPresignedImageUrlController, getImagesController, transformImageController } from "../controllers/image.controller.js";
+import {
+    uploadImageController,
+    getPresignedImageUrlController,
+    getImagesController,
+    transformImageController,
+} from "../controllers/image.controller.js";
 import { getImagesValidator, transformImageValidator } from "../middlewares/validate.middleware.js";
-import { authorizationCheck } from "../middlewares/image.middleware.js";
+import { upload, authorizationCheck, transformLimitCheck } from "../middlewares/image.middleware.js";
 
 const imageRouter = express.Router();
 
@@ -17,6 +21,7 @@ imageRouter.post(
     "/images/:id/transform",
     jwtCheck,
     authorizationCheck,
+    transformLimitCheck,
     transformImageValidator,
     transformImageController,
 );
